@@ -5,7 +5,7 @@ import "errors"
 var ErrCacheitemNotfound = errors.New("cacheitem not found")
 
 type CacheitemRepository interface {
-	Read(string) (Cacheitem, error)
+	Read(string) (*Cacheitem, error)
 	Write(Cacheitem) error
 }
 
