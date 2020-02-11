@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"net/http"
+)
 
 var ErrCacheitemNotfound = errors.New("cacheitem not found")
 
@@ -10,6 +13,7 @@ type CacheitemRepository interface {
 }
 
 type Cacheitem struct {
-	Key   string
-	Value string
+	Key    string      `json="key"`
+	Header http.Header `json="header"`
+	Value  string      `json="value"`
 }
