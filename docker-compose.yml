@@ -1,0 +1,14 @@
+version: "3"
+services:
+  cproxy:
+    build: .
+    environment:
+      CPROXY_DEBUG: "true"
+      CPROXY_CACHETYPE: "redis"
+      CPROXY_REDISURI: "redis:6379"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - redis
+  redis:
+    image: redis
