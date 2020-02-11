@@ -7,31 +7,28 @@ import (
 	"github.com/sauvaget/containousproxy/models"
 )
 
-type storage struct {
+type cacheStorage struct {
 	c *cache.Cache
 }
 
-func NewStorage(cttl time.Duration) *storage {
+func NewCacheStorage(cttl time.Duration) *cacheStorage {
 	c := cache.New(cttl, cttl)
-	s := &storage{
+	s := &cacheStorage{
 		c: c,
 	}
 	return s
 }
 
-func (s *storage) Read(key string) (*models.Cacheitem, error) {
+func (s *cacheStorage) Read(key string) (*models.Cacheitem, error) {
 	val, found := s.c.Get(key)
 	if !found {
 		return nil, models.ErrCacheitemNotfound
 	}
-	ci := &models.Cacheitem{
-		Key:   key,
-		Value: val.(string),
-	}
-	return ci, nil
+
+	return val.(*models.Cacheitem), nil
 }
 
-func (s *storage) Write(ci models.Cacheitem) error {
-	s.c.Set(ci.Key, ci.Value, cache.DefaultExpiration)
+func (s *cacheStorage) Write(ci models.Cacheitem) error {
+	s.c.Set(ci.Key, &ci, cache.DefaultExpiration)
 	return nil
 }
